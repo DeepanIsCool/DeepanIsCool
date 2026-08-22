@@ -191,6 +191,7 @@ def summarise(user):
         total=cal["totalContributions"],
         active=sum(1 for d in days if d["contributionCount"] > 0),
         best_week=max(weekly) if weekly else 0,
+        peak_day=max((d["contributionCount"] for d in days), default=0),
         weekly=weekly, weeks=weeks,
         current=cur, longest=best,
         by_size=by_size, by_repo=by_repo)
@@ -380,11 +381,17 @@ def draw_year(s):
     weeks = s["weeks"]
     H = int(pad_t + 7 * LH + 26)
 
+    # relative to this user's own busiest day, not a fixed absolute cut —
+    # a light contributor's real activity then still spans the full ramp
+    # instead of clustering at the quiet end (same scheme GitHub's own
+    # heatmap uses: quartiles of your own range, not a global constant)
+    peak = s["peak_day"] or 1
+
     def level(v):
-        for i, cut in enumerate((0, 2, 5, 9)):
-            if v <= cut:
-                return i
-        return 4
+        if v <= 0:
+            return 0
+        r = v / peak
+        return 1 if r <= 0.25 else 2 if r <= 0.5 else 3 if r <= 0.75 else 4
 
     p = [head(WIDTH, H)]
     p.append(f'<g opacity="0">{fade(0.10)}'
@@ -470,7 +477,7 @@ def main():
     s = summarise(fetch(login, token))
     files = {"stats.svg": draw_stats(s), "streak.svg": draw_streak(s),
              "langs.svg": draw_langs(s), "year.svg": draw_year(s)}
-    for word in ("about", "stack", "projects", "stats", "about this page"):
+    for word in ("about", "stack", "projects", "stats"):
         files[f"hd-{word.replace(' ', '-')}.svg"] = draw_heading(word)
 
     changed = [n for n, svg in files.items()

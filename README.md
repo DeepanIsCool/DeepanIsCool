@@ -53,30 +53,3 @@ AI voice call management platform with CRM automation built in.
 <img src="./year.svg" width="620" alt="The last year, one character per day"/>
 
 </div>
-
-<img src="./hd-about-this-page.svg" width="620" alt="about this page"/>
-
-Every graphic on this page is generated inside this repository, not pulled<br>
-from someone else's server. `ascii.svg` is a photo run through a character<br>
-ramp by [`scripts/make_portrait.py`](scripts/make_portrait.py); the stat<br>
-graphics and these section headings are drawn once a day by<br>
-[a scheduled action](.github/workflows/stats.yml) straight from the GitHub<br>
-GraphQL API, committing only what changed.
-
-They animate with SMIL inside the SVG, because GitHub strips scripts from<br>
-READMEs — and since nothing loads from a third party, nothing here can<br>
-rate-limit or go dark. The headings are SVGs for the same reason: GitHub also<br>
-strips CSS, so an image is the only way to put this page's own typeface on<br>
-them.
-
-The typeface is [JetBrains Mono](scripts/fonts), subset to just the characters<br>
-each graphic draws and inlined as base64. That isn't only for looks: the<br>
-portrait's grid assumes an advance width of exactly 0.600 em, and a viewer<br>
-whose default monospace is narrower would otherwise see it squeezed.
-
-Language totals cover public repositories only. `year.svg` uses the<br>
-portrait's character ramp: `:` `+` `#` `@`, quiet to loud.
-
-Setup credit: pipeline and layout adapted from the [self-generating GitHub<br>
-profile guide](https://agreeable-credit-859.notion.site/A-GitHub-profile-that-generates-itself-3abedfe9a65a81e4afc9daed90cb4e7e)<br>
-and [andriidrok1/andriidrok1](https://github.com/andriidrok1/andriidrok1).
