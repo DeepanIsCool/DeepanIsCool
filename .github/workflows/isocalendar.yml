@@ -1,0 +1,37 @@
+name: refresh isocalendar
+
+# Separate from stats.yml on purpose: this one depends on a third-party action
+# and, for private-contribution totals, on a PAT. Keeping it apart means a
+# failure here never blocks the graphics we draw ourselves.
+on:
+  schedule:
+    - cron: "41 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-isocalendar
+  cancel-in-progress: false
+
+jobs:
+  isocalendar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Pinned rather than @latest: this action runs with a token, so an
+      # upstream change should be something we opt into, not something that
+      # arrives overnight.
+      - name: Draw the isometric year
+        uses: lowlighter/metrics@v3.34
+        with:
+          # Falls back to the built-in token, which can still see public
+          # contributions — it just can't count private ones.
+          token: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+          user: DeepanIsCool
+          filename: isocalendar.svg
+          base: ""
+          config_timezone: Asia/Kolkata
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
