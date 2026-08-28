@@ -50,4 +50,6 @@ AI voice call management platform with CRM automation built in.
 
 <img src="./langs.svg" width="620" alt="Top languages by bytes and by repo"/>
 
+<img src="./isocalendar.svg" width="620" alt="The last year as an isometric contribution calendar"/>
+
 </div>
