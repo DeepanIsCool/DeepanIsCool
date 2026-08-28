@@ -43,8 +43,14 @@ jobs:
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
 
+      # output_action: none leaves the render in /metrics_renders (a host
+      # volume the action creates), not in the workspace — so copy it in
+      # before restyling, or the step silently re-reads the committed file
+      # and reports "already restyled".
       - name: Match it to the page
-        run: python3 scripts/restyle_isocalendar.py
+        run: |
+          cp /metrics_renders/isocalendar.svg isocalendar.svg
+          python3 scripts/restyle_isocalendar.py
 
       - name: Commit whatever changed
         run: |
